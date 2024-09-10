@@ -1,0 +1,22 @@
+server:
+  port: ${PORT:8089}
+    
+spring:
+  cloud:
+    aws:
+      region:
+        static: us-east-1  # La región que uses en LocalStack
+      credentials:
+        accessKey: test  # Valores ficticios, LocalStack no valida esto
+        secretKey: test
+  profiles:
+    active: localstack # o 'aws' dependiendo del entorno      
+        
+#Configuración de AWS y nombre de la cola
+custom:
+  aws:
+    sqsOrders: ${SQS_ORDERS:message-to-sqs.fifo}
+    
+logging:
+  level:
+    root: info

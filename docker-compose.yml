@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:      
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"  # Puerto principal para los servicios de LocalStack
+      - "4571:4571"  # Puerto para la ejecución de Lambdas
+    environment:
+      - SERVICES=s3,sqs,sns,lambda,apigateway,dynamodb
+      - DEFAULT_REGION=${DEFAULT_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - LAMBDA_EXECUTOR=docker
+      - LAMBDA_REMOTE_DOCKER=true
+      - LAMBDA_REMOVE_CONTAINERS=true
+      - DATA_DIR=/tmp/localstack/data
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - ./bin:/docker-entrypoint-initaws.d
+    networks:
+      - internal
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    ports:
+      - "8080:8080"
+    environment:
+      SWAGGER_JSON: /usr/share/nginx/html/openapi/openapi.yaml
+    volumes:
+      - ./openapi:/usr/share/nginx/html/openapi  
+    networks:
+      - internal    
+
+networks:
+  internal:
+    name: internal

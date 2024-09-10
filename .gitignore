@@ -1,0 +1,23 @@
+# Eclipse
+.classpath
+.project
+.settings/
+.factorypath
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+
+# Docker
+scripts/create_lambda_function.zip
+lambdas/package/
+mongo/
+venv/
